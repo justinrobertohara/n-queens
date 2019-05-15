@@ -120,8 +120,8 @@
     hasRowConflictAt: function(rowIndex) {
       return (
         this.rows()[rowIndex].reduce((acc, val) => {
-          return acc + val;
-        }) > 1
+          return acc + val; // sum all the values in the row
+        }) > 1 // if the sum is greater than 1, there is more than one queen
       );
     },
 
@@ -132,7 +132,7 @@
           return true;
         }
       }
-      return false; // fixme
+      return false;
     },
 
     // COLUMNS - run from top to bottom
@@ -142,12 +142,12 @@
     hasColConflictAt: function(colIndex) {
       return (
         this.rows()
-          .map(row => {
+          .map(row => { // get the column values from the rows
             return row[colIndex];
           })
-          .reduce((acc, val) => {
+          .reduce((acc, val) => { // sum the values in this column
             return acc + val;
-          }) > 1
+          }) > 1 // if the sum is greater than one, there is more than one queen
       );
     },
 
@@ -166,6 +166,20 @@
     //
     // test if a specific major diagonal on this board contains a conflict
     hasMajorDiagonalConflictAt: function(index) {
+      /* Values of 'index' refer to the start of the diaganol
+      *  A 4x4 example where the x's are positions on the board:
+      *   0   1 2 3
+      *     x x x x
+      *  -1 x x x x
+      *  -2 x x x x
+      *  -3 x x x x
+      *
+      *  Another way to view how 'index' maps to a 4x4 board:
+      *   0  1  2  3
+      *  -1  0  1  2
+      *  -2 -1  0  1
+      *  -3 -2 -1  0
+      */
       let startRow = index >= 0 ? 0 : Math.abs(index);
       let startCol = index <= 0 ? 0 : index;
       let sum = 0;
@@ -176,7 +190,7 @@
         startCol += 1;
       }
 
-      return sum > 1; // fixme
+      return sum > 1;
 
       //original argument = majorDiagonalColumnIndexAtFirstRow
     },
