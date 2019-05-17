@@ -204,7 +204,7 @@
           return true;
         }
       }
-      return false; // fixme
+      return false;
     },
 
     // Minor Diagonals - go from top-right to bottom-left
