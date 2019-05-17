@@ -19,7 +19,7 @@ window.findNRooksSolution = function(n) {
   const board = new Board({ n: n });
 
   // for every column in row
-  for (let row = 0; row < n; row++) {
+  /* for (let row = 0; row < n; row++) {
     for (let col = 0; col < n; col++) {
       // try placing a piece at row and col
       board.togglePiece(row, col);
@@ -32,6 +32,11 @@ window.findNRooksSolution = function(n) {
         break; // break out of column loop, this row is already taken
       }
     }
+  } */
+
+  // rooks down the diagonals are always valid boards
+  for (let i = 0; i < n; i++) {
+    board.togglePiece(i, i);
   }
 
   var solution = board.rows();
