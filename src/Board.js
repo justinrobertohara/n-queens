@@ -142,10 +142,12 @@
     hasColConflictAt: function(colIndex) {
       return (
         this.rows()
-          .map(row => { // get the column values from the rows
+          .map(row => {
+            // get the column values from the rows
             return row[colIndex];
           })
-          .reduce((acc, val) => { // sum the values in this column
+          .reduce((acc, val) => {
+            // sum the values in this column
             return acc + val;
           }) > 1 // if the sum is greater than one, there is more than one queen
       );
@@ -166,20 +168,20 @@
     //
     // test if a specific major diagonal on this board contains a conflict
     hasMajorDiagonalConflictAt: function(index) {
-      /* Values of 'index' refer to the start of the diaganol
-      *  A 4x4 example where the x's are positions on the board:
-      *   0   1 2 3
-      *     x x x x
-      *  -1 x x x x
-      *  -2 x x x x
-      *  -3 x x x x
-      *
-      *  Another way to view how 'index' maps to a 4x4 board:
-      *   0  1  2  3
-      *  -1  0  1  2
-      *  -2 -1  0  1
-      *  -3 -2 -1  0
-      */
+      /* Values of 'index' refer to the start of the diagonal
+       *  A 4x4 example where the x's are positions on the board:
+       *   0   1 2 3
+       *     x x x x
+       *  -1 x x x x
+       *  -2 x x x x
+       *  -3 x x x x
+       *
+       *  Another way to view how 'index' maps to a 4x4 board:
+       *   0  1  2  3
+       *  -1  0  1  2
+       *  -2 -1  0  1
+       *  -3 -2 -1  0
+       */
       let startRow = index >= 0 ? 0 : Math.abs(index);
       let startCol = index <= 0 ? 0 : index;
       let sum = 0;
@@ -215,13 +217,42 @@
     // --------------------------------------------------------------
     //
     // test if a specific minor diagonal on this board contains a conflict
-    hasMinorDiagonalConflictAt: function(minorDiagonalColumnIndexAtFirstRow) {
-      return false; // fixme
+    hasMinorDiagonalConflictAt: function(index) {
+      /*  Another way to view how 'index' maps to a 4x4 board:
+       *   0  1  2  3
+       *   1  2  3  4
+       *   2  3  4  5
+       *   3  4  5  6
+       */
+
+      const pivot = this.get('n') - 1;
+      let row = index <= pivot ? 0 : index - pivot;
+      let col = index <= pivot ? index : pivot;
+
+      let sum = 0;
+      while (this._isInBounds(row, col)) {
+        sum += this.rows()[row][col];
+        row += 1;
+        col -= 1;
+      }
+
+      return sum > 1; //
     },
 
     // test if any minor diagonals on this board contain conflicts
     hasAnyMinorDiagonalConflicts: function() {
-      return false; // fixme
+      for (let row = 0; row < this.get('n'); row++) {
+        for (let col = 0; col < this.get('n'); col++) {
+          if (
+            this.hasMinorDiagonalConflictAt(
+              this._getFirstRowColumnIndexForMinorDiagonalOn(row, col)
+            )
+          ) {
+            return true;
+          }
+        }
+      }
+      return false;
     }
 
     /*--------------------  End of Helper Functions  ---------------------*/
