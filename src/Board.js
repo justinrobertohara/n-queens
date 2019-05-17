@@ -199,15 +199,9 @@
 
     // test if any major diagonals on this board contain conflicts
     hasAnyMajorDiagonalConflicts: function() {
-      for (let i = 0; i < this.get('n'); i++) {
-        for (let j = 0; j < this.get('n'); j++) {
-          if (
-            this.hasMajorDiagonalConflictAt(
-              this._getFirstRowColumnIndexForMajorDiagonalOn(i, j)
-            )
-          ) {
-            return true;
-          }
+      for (let index = 1 - this.get('n'); index < this.get('n'); index++) {
+        if (this.hasMajorDiagonalConflictAt(index)) {
+          return true;
         }
       }
       return false; // fixme
@@ -241,15 +235,11 @@
 
     // test if any minor diagonals on this board contain conflicts
     hasAnyMinorDiagonalConflicts: function() {
-      for (let row = 0; row < this.get('n'); row++) {
-        for (let col = 0; col < this.get('n'); col++) {
-          if (
-            this.hasMinorDiagonalConflictAt(
-              this._getFirstRowColumnIndexForMinorDiagonalOn(row, col)
-            )
-          ) {
-            return true;
-          }
+      // if baord size is 0, don't let maxIndex be negative
+      const maxIndex = this.get('n') === 0 ? 0 : this.get('n') * 2 - 2;
+      for (let index = 0; index < maxIndex; index++) {
+        if (this.hasMinorDiagonalConflictAt(index)) {
+          return true;
         }
       }
       return false;
