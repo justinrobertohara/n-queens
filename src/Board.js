@@ -127,7 +127,9 @@
 
     // test if any rows on this board contain conflicts
     hasAnyRowConflicts: function() {
-      for (let i = 0; i < this.get('n'); i++) {
+      const n = this.get('n');
+
+      for (let i = 0; i < n; i++) {
         if (this.hasRowConflictAt(i)) {
           return true;
         }
@@ -155,7 +157,8 @@
 
     // test if any columns on this board contain conflicts
     hasAnyColConflicts: function() {
-      for (let i = 0; i < this.get('n'); i++) {
+      const n = this.get('n');
+      for (let i = 0; i < n; i++) {
         if (this.hasColConflictAt(i)) {
           return true;
         }
@@ -199,7 +202,8 @@
 
     // test if any major diagonals on this board contain conflicts
     hasAnyMajorDiagonalConflicts: function() {
-      for (let index = 1 - this.get('n'); index < this.get('n'); index++) {
+      const n = this.get('n');
+      for (let index = 1 - n; index < n; index++) {
         if (this.hasMajorDiagonalConflictAt(index)) {
           return true;
         }
