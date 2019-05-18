@@ -18,6 +18,16 @@ window.findNRooksSolution = function(n) {
    */
   const board = new Board({ n: n });
 
+  // rooks down the diagonals are always valid boards
+  for (let i = 0; i < n; i++) {
+    board.togglePiece(i, i);
+  }
+
+  var solution = board.rows();
+  console.log('Single solution for ' + n + ' rooks:', JSON.stringify(solution));
+  return solution;
+
+  //looping through the rows and columns solution
   // for every column in row
   /* for (let row = 0; row < n; row++) {
     for (let col = 0; col < n; col++) {
@@ -33,21 +43,13 @@ window.findNRooksSolution = function(n) {
       }
     }
   } */
-
-  // rooks down the diagonals are always valid boards
-  for (let i = 0; i < n; i++) {
-    board.togglePiece(i, i);
-  }
-
-  var solution = board.rows();
-  console.log('Single solution for ' + n + ' rooks:', JSON.stringify(solution));
-  return solution;
 };
 
 // return the number of nxn chessboards that exist, with n rooks placed such that none of them can attack each other
 window.countNRooksSolutions = function(n) {
   //set the solution count to 0
   var solutionCount = 0;
+
   //instantiate new Board with the given argument
   const board = new Board({ n: n });
 
@@ -82,7 +84,7 @@ window.countNRooksSolutions = function(n) {
 window.findNQueensSolution = function(n) {
   const board = new Board({ n: n });
 
-  //create a helper function based on the number of Rooks
+  //create a helper function based on the number of Queens
   function findSolution(row) {
     //base case is if row is equal to the given argument and then adds to the solution count
     if (row === n) {
@@ -92,14 +94,18 @@ window.findNQueensSolution = function(n) {
       for (let col = 0; col < n; col++) {
         //sets the piece
         board.togglePiece(row, col);
-        if (board.hasAnyQueensConflicts()) {
+        if (
+          board.hasAnyColConflicts() ||
+          board.hasAnyMajorDiagonalConflicts() ||
+          board.hasAnyMinorDiagonalConflicts()
+        ) {
           //unsets the piece if there are conflicts
           board.togglePiece(row, col);
         } else {
-          //recursively checks for all solutions with this row's rook, in each column
-          const maybeSolution = findSolution(row + 1);
-          if (maybeSolution) {
-            return maybeSolution;
+          //recursively checks for all solutions with this row's queen, in each column
+          const possibleSolution = findSolution(row + 1);
+          if (possibleSolution) {
+            return possibleSolution;
           }
           board.togglePiece(row, col);
         }
@@ -116,11 +122,11 @@ window.findNQueensSolution = function(n) {
 
 // return the number of nxn chessboards that exist, with n queens placed such that none of them can attack each other
 window.countNQueensSolutions = function(n) {
-  var solutionCount = 0; //fixme
+  var solutionCount = 0;
 
   const board = new Board({ n: n });
 
-  //create a helper function based on the number of Rooks
+  //create a helper function based on the number of Queens
   function findSolution(row) {
     //base case is if row is equal to the given argument and then adds to the solution count
     if (row === n) {
@@ -130,11 +136,15 @@ window.countNQueensSolutions = function(n) {
       for (let col = 0; col < n; col++) {
         //sets the piece
         board.togglePiece(row, col);
-        if (board.hasAnyQueensConflicts()) {
+        if (
+          board.hasAnyColConflicts() ||
+          board.hasAnyMajorDiagonalConflicts() ||
+          board.hasAnyMinorDiagonalConflicts()
+        ) {
           //unsets the piece if there are conflicts
           board.togglePiece(row, col);
         } else {
-          //recursively checks for all solutions with this row's rook, in each column
+          //recursively checks for all solutions with this row's queen, in each column
           findSolution(row + 1);
           board.togglePiece(row, col);
         }
